@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4113D6F82190C6AC005D7EF9 /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4113D6F72190C6AC005D7EF9 /* ProfileTableViewController.swift */; };
 		41341935218372670080A87A /* NewClassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41341934218372670080A87A /* NewClassViewController.swift */; };
 		4134AE5521908F7A00B87C7E /* HomeworkInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4134AE5421908F7A00B87C7E /* HomeworkInfoViewController.swift */; };
 		4134AE572190BF8E00B87C7E /* GlobalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4134AE562190BF8E00B87C7E /* GlobalData.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4113D6F72190C6AC005D7EF9 /* ProfileTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
 		41341934218372670080A87A /* NewClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewClassViewController.swift; sourceTree = "<group>"; };
 		4134AE5421908F7A00B87C7E /* HomeworkInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkInfoViewController.swift; sourceTree = "<group>"; };
 		4134AE562190BF8E00B87C7E /* GlobalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalData.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 			children = (
 				4177A3C82167CC9F00D3935A /* AppDelegate.swift */,
 				4177A3CC2167CC9F00D3935A /* Main.storyboard */,
+				4113D6F72190C6AC005D7EF9 /* ProfileTableViewController.swift */,
 				4134AE5421908F7A00B87C7E /* HomeworkInfoViewController.swift */,
 				415D010C218F988A00AD976E /* AssignmentInfoViewController.swift */,
 				41DC2532218A8F9F0052579E /* NewAssignmentViewController.swift */,
@@ -186,6 +189,7 @@
 				4134AE5521908F7A00B87C7E /* HomeworkInfoViewController.swift in Sources */,
 				4134AE572190BF8E00B87C7E /* GlobalData.swift in Sources */,
 				41DC2533218A8F9F0052579E /* NewAssignmentViewController.swift in Sources */,
+				4113D6F82190C6AC005D7EF9 /* ProfileTableViewController.swift in Sources */,
 				417F06FF217113CF0095A705 /* CustomTableViewCell.swift in Sources */,
 				41DC2531218A4E470052579E /* DayClass.swift in Sources */,
 				417A2ED62186B50900A09DAC /* ClassHomeworkTableViewController.swift in Sources */,

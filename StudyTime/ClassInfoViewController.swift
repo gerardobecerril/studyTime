@@ -34,6 +34,39 @@ class ClassInfoViewController: UIViewController {
     
     @IBAction func doneTapped(_ sender: Any) {
         
+        if name.text != "" && teacher.text != "" && color.text != "Pick a color" {
+            
+            if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+                
+                let newClass = ClassEntity(context: context)
+                if let unwrappedName = name.text {
+                    if let unwrappedNotes = notes.text {
+                        if let unwrappedTeacher = teacher.text {
+                            if let unwrappedColor = color.text {
+                                newClass.name = unwrappedName
+                                newClass.notes = unwrappedNotes
+                                newClass.teacher = unwrappedTeacher
+                                let myColors : [Int] = chooseColor(color: unwrappedColor)
+                                newClass.red = Int16(myColors[0])
+                                newClass.green = Int16(myColors[1])
+                                newClass.blue = Int16(myColors[2])
+                            }
+                        }
+                    }
+                }
+                
+                try? context.save()
+                previousVC.shouldReloadData = true
+                navigationController?.popViewController(animated: true)
+                
+            }
+            
+        } else {
+            
+            displayAlert(alertTitle: "Fields missing", alertMessage: "You haven't filled all the fields required.", actionTitle: "OK")
+            
+        }
+        
     }
     
     @IBAction func deleteTapped(_ sender: Any) {
