@@ -59,7 +59,7 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
                                 newClass.name = unwrappedName
                                 newClass.notes = unwrappedNotes
                                 newClass.teacher = unwrappedTeacher
-                                let myColors : [Int] = chooseColor(color: unwrappedColor)
+                                let myColors : [Double] = chooseColor(color: unwrappedColor)
                                 newClass.red = Int16(myColors[0])
                                 newClass.green = Int16(myColors[1])
                                 newClass.blue = Int16(myColors[2])
@@ -82,31 +82,31 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
     }
     
-    func chooseColor(color: String) -> [Int] {
-        var colorArray = [1, 1, 1]
+    func chooseColor(color: String) -> [Double] {
+        var colorArray = [1.0, 1.0, 1.0]
         switch(color) {
         case "Red":
             colorArray = [1, 0, 0]
         case "Light green":
-            colorArray = [128/255, 1, 0]
+            colorArray = [Double(128/255), 1.0, 0.0]
         case "Dark green":
-            colorArray = [76/255, 153/255, 0]
+            colorArray = [Double(76/255), Double(153/255), 0.0]
         case "Light blue":
-            colorArray = [0, 1, 1]
+            colorArray = [0, 1.0, 1.0]
         case "Dark blue":
-            colorArray = [51/255, 51/255, 1]
+            colorArray = [Double(51/255), Double(51/255), 1.0]
         case "Purple":
-            colorArray = [102/255, 0, 204/255]
+            colorArray = [Double(102/255), 0.0, Double(204/255)]
         case "Yellow":
-            colorArray = [1, 1, 0]
+            colorArray = [1.0, 1.0, 0.0]
         case "Grey":
-            colorArray = [160/255, 160/255, 160/255]
+            colorArray = [Double(160/255), Double(160/255), Double(160/255)]
         case "Brown":
-            colorArray = [102/255, 51/255, 0]
+            colorArray = [Double(102/255), Double(51/255), 0.0]
         case "Orange":
-            colorArray = [1, 128/255, 0]
+            colorArray = [1.0, Double(128/255), 0.0]
         default:
-            colorArray = [1, 1, 1]
+            colorArray = [1.0, 1.0, 1.0]
         }
         return colorArray
     }
