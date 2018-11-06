@@ -42,9 +42,9 @@ class ClassHomeworkTableViewController: UITableViewController {
                         for i in 0...myAssignments.count-1 {
                             if let myClassName = myAssignments[i].rgbClass {
                                 let classColors = getClassesColors(currentClass: myClassName)
-                                myAssignments[i].red = Int16(classColors[0])
-                                myAssignments[i].green = Int16(classColors[1])
-                                myAssignments[i].blue = Int16(classColors[2])
+                                myAssignments[i].red = classColors[0]
+                                myAssignments[i].green = classColors[1]
+                                myAssignments[i].blue = classColors[2]
                             }
                         }
                         
@@ -54,9 +54,9 @@ class ClassHomeworkTableViewController: UITableViewController {
         }
     }
     
-    func getClassesColors(currentClass: String) -> [Int] {
+    func getClassesColors(currentClass: String) -> [Double] {
         
-        var colorArray : [Int] = []
+        var colorArray : [Double] = []
         
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
             
@@ -69,9 +69,9 @@ class ClassHomeworkTableViewController: UITableViewController {
                         for i in 0...coreDataClasses.count-1 {
                             if let myClassName = coreDataClasses[i].name {
                                 if currentClass == myClassName {
-                                    colorArray.append(Int(coreDataClasses[i].red))
-                                    colorArray.append(Int(coreDataClasses[i].green))
-                                    colorArray.append(Int(coreDataClasses[i].blue))
+                                    colorArray.append(coreDataClasses[i].red)
+                                    colorArray.append(coreDataClasses[i].green)
+                                    colorArray.append(coreDataClasses[i].blue)
                                 }
                             }
                         }
