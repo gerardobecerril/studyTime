@@ -18,10 +18,11 @@ class ClassesTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // deleteEverything()
+        //deleteEverything()
         getClasses()
     }
     
+    // In case it's needed.
     func deleteEverything() {
         
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {

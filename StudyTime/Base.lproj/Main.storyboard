@@ -48,7 +48,7 @@
             </objects>
             <point key="canvasLocation" x="1868" y="90"/>
         </scene>
-        <!--New Class View Controller-->
+        <!--New class-->
         <scene sceneID="uzq-6i-Psg">
             <objects>
                 <viewController id="S3u-Oy-nqp" customClass="NewClassViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
@@ -56,7 +56,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZIM-Ws-elJ">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZIM-Ws-elJ">
                                 <rect key="frame" x="16" y="84" width="343" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="TH4-bO-g9S"/>
@@ -145,7 +145,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Kx-ri-hS7"/>
                     </view>
-                    <navigationItem key="navigationItem" id="y5q-qR-BjI">
+                    <navigationItem key="navigationItem" title="New class" id="y5q-qR-BjI">
                         <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="ia6-6f-bi1">
                             <connections>
                                 <action selector="doneTapped:" destination="S3u-Oy-nqp" id="lUL-2h-roq"/>
@@ -163,7 +163,7 @@
             </objects>
             <point key="canvasLocation" x="2816.8000000000002" y="89.505247376311857"/>
         </scene>
-        <!--Class Homework Table View Controller-->
+        <!--Assignments-->
         <scene sceneID="oXg-KA-iUX">
             <objects>
                 <tableViewController id="NWx-BD-3m4" customClass="ClassHomeworkTableViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
@@ -186,23 +186,23 @@
                             <outlet property="delegate" destination="NWx-BD-3m4" id="SLk-fP-Y6M"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Lj1-6X-F8W">
+                    <navigationItem key="navigationItem" title="Assignments" id="Lj1-6X-F8W">
                         <barButtonItem key="rightBarButtonItem" systemItem="bookmarks" id="bFI-bq-sBq">
                             <connections>
-                                <action selector="infoTapped:" destination="NWx-BD-3m4" id="BsD-Ig-A96"/>
+                                <action selector="infoTapped:" destination="NWx-BD-3m4" id="lxE-QO-krF"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="q98-8d-mbS" kind="show" identifier="toHWInfo" id="7ms-AW-RSx"/>
                         <segue destination="jzZ-RZ-tFb" kind="show" identifier="toClassInfo" id="ur8-G1-FPn"/>
+                        <segue destination="4RV-En-Vmy" kind="show" identifier="toHWInfo" id="Bq9-ES-LnP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="25X-lu-ZqE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3794" y="90"/>
         </scene>
-        <!--Class Info View Controller-->
+        <!--Class Info-->
         <scene sceneID="lFr-Sg-RO6">
             <objects>
                 <viewController id="jzZ-RZ-tFb" customClass="ClassInfoViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
@@ -309,7 +309,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KrH-PQ-CfC"/>
                     </view>
-                    <navigationItem key="navigationItem" id="kwY-ae-l3I">
+                    <navigationItem key="navigationItem" title="Class Info" id="kwY-ae-l3I">
                         <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="YMK-vO-8jb">
                             <connections>
                                 <action selector="doneTapped:" destination="jzZ-RZ-tFb" id="g9o-F3-6Mr"/>
@@ -327,22 +327,7 @@
             </objects>
             <point key="canvasLocation" x="4728.8000000000002" y="89.505247376311857"/>
         </scene>
-        <!--Homework Info View Controller-->
-        <scene sceneID="zI5-s3-CVN">
-            <objects>
-                <viewController id="q98-8d-mbS" customClass="HomeworkInfoViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="pKp-am-cAY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="BcA-6x-pW2"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Lq6-j1-80H" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5606" y="90"/>
-        </scene>
-        <!--Assignments Table View Controller-->
+        <!--Assignments-->
         <scene sceneID="FQc-Ww-egN">
             <objects>
                 <tableViewController id="icv-un-QfN" customClass="AssignmentsTableViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
@@ -365,7 +350,7 @@
                             <outlet property="delegate" destination="icv-un-QfN" id="qd6-RA-AQE"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="wOi-8a-edW">
+                    <navigationItem key="navigationItem" title="Assignments" id="wOi-8a-edW">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="K0Q-UZ-Dnb">
                             <connections>
                                 <segue destination="c1i-d7-Ibz" kind="show" id="VyO-cF-NGV"/>
@@ -373,14 +358,14 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="4RV-En-Vmy" kind="show" identifier="toAssignmentInfo" id="0Dc-IL-Zdx"/>
+                        <segue destination="4RV-En-Vmy" kind="show" identifier="toAssignmentInfo" id="ZP2-b5-Nq9"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WGd-Gj-hTi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1868" y="869"/>
         </scene>
-        <!--New Assignment View Controller-->
+        <!--New assignment-->
         <scene sceneID="vkW-Rg-SQT">
             <objects>
                 <viewController id="c1i-d7-Ibz" customClass="NewAssignmentViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
@@ -466,7 +451,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="d0q-Xz-jfA"/>
                     </view>
-                    <navigationItem key="navigationItem" id="lZ3-3Q-eXU">
+                    <navigationItem key="navigationItem" title="New assignment" id="lZ3-3Q-eXU">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="dq2-8U-CkL">
                             <connections>
                                 <action selector="doneTapped:" destination="c1i-d7-Ibz" id="i3k-dX-O5e"/>
@@ -484,10 +469,10 @@
             </objects>
             <point key="canvasLocation" x="2817" y="869"/>
         </scene>
-        <!--Assignment Info View Controller-->
+        <!--Assignment Info-->
         <scene sceneID="GeB-Xj-H0f">
             <objects>
-                <viewController id="4RV-En-Vmy" customClass="AssignmentInfoViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Assignment Info" id="4RV-En-Vmy" customClass="AssignmentInfoViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VV4-nd-iOb">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -559,6 +544,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PuY-lg-Jas"/>
                     </view>
+                    <navigationItem key="navigationItem" id="2lh-k3-CVa">
+                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="fuA-BR-U3O"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="classField" destination="1uD-fM-Fxu" id="7In-No-hlB"/>
                         <outlet property="dayField" destination="b74-Hz-f4U" id="1EC-Yh-3j1"/>
@@ -567,13 +555,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zj9-Ld-VXK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3792.8000000000002" y="868.51574212893559"/>
+            <point key="canvasLocation" x="3793" y="869"/>
         </scene>
-        <!--Item-->
+        <!--Classes-->
         <scene sceneID="z7w-HD-iQd">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8AP-YP-xIU" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="l8N-Xr-WUA"/>
+                    <tabBarItem key="tabBarItem" title="Classes" image="classesIcon" id="l8N-Xr-WUA"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="FpJ-Eh-30T">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -608,11 +596,11 @@
             </objects>
             <point key="canvasLocation" x="-7.2000000000000002" y="90.404797601199405"/>
         </scene>
-        <!--Item-->
+        <!--Assignments-->
         <scene sceneID="ZV8-qr-UvP">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Gqy-Jt-Z0V" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="oWx-HC-3d0"/>
+                    <tabBarItem key="tabBarItem" title="Assignments" image="assignmentsIcon" id="oWx-HC-3d0"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="HvO-SP-DMr">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -627,7 +615,7 @@
             </objects>
             <point key="canvasLocation" x="932" y="870"/>
         </scene>
-        <!--Profile Table View Controller-->
+        <!--Profile-->
         <scene sceneID="KIE-ou-ilQ">
             <objects>
                 <tableViewController id="qmc-Nz-ZjV" customClass="ProfileTableViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
@@ -650,17 +638,61 @@
                             <outlet property="delegate" destination="qmc-Nz-ZjV" id="aCw-QI-jjC"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="osb-Cp-3cG"/>
+                    <navigationItem key="navigationItem" title="Profile" id="osb-Cp-3cG"/>
+                    <connections>
+                        <segue destination="ZOF-lV-aqb" kind="show" identifier="toEditName" id="NZs-ba-HNJ"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ja4-o6-VRp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1871.2" y="1657.4212893553224"/>
         </scene>
-        <!--Item-->
+        <!--Edit name-->
+        <scene sceneID="Tz2-K0-FEE">
+            <objects>
+                <viewController title="Edit name" id="ZOF-lV-aqb" customClass="EditNameViewController" customModule="StudyTime" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vs6-wD-Ppq">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Insert your name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yi4-Ap-91G">
+                                <rect key="frame" x="16" y="114" width="343" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="XYV-QZ-RfQ"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Yi4-Ap-91G" firstAttribute="leading" secondItem="gtq-Dm-SSe" secondAttribute="leading" constant="16" id="05y-Cf-zu2"/>
+                            <constraint firstItem="gtq-Dm-SSe" firstAttribute="trailing" secondItem="Yi4-Ap-91G" secondAttribute="trailing" constant="16" id="2ey-b4-ebd"/>
+                            <constraint firstItem="Yi4-Ap-91G" firstAttribute="top" secondItem="gtq-Dm-SSe" secondAttribute="top" constant="50" id="lEs-4g-XvU"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="gtq-Dm-SSe"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="mVh-Mz-iZt">
+                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="a9s-BR-wai">
+                            <connections>
+                                <action selector="doneTapped:" destination="ZOF-lV-aqb" id="7rl-Ps-aqi"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="nameField" destination="Yi4-Ap-91G" id="fWu-H6-J6j"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eie-s9-Wgg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2816.8000000000002" y="1656.521739130435"/>
+        </scene>
+        <!--Profile-->
         <scene sceneID="uSu-3p-xNY">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6bM-GX-S0o" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="56C-gr-qLz"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="profileIcon" id="56C-gr-qLz"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="QSt-K3-3PW">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -676,4 +708,12 @@
             <point key="canvasLocation" x="932" y="1657.4212893553224"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="assignmentsIcon" width="18.75" height="18.75"/>
+        <image name="classesIcon" width="18.75" height="18.75"/>
+        <image name="profileIcon" width="18.75" height="18.75"/>
+    </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Bq9-ES-LnP"/>
+    </inferredMetricsTieBreakers>
 </document>

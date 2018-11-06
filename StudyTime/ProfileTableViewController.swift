@@ -19,9 +19,28 @@ class ProfileTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        getUsername()
         classCount = countClasses()
         assignmentsCount = countAssignments()
         tableView.reloadData()
+    }
+    
+    func getUsername() {
+        
+        if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+            
+            if let entityUsername = try? context.fetch(UsernameEntity.fetchRequest()) as? [UsernameEntity] {
+                
+                if let coreDataUsername = entityUsername {
+                    if coreDataUsername.count > 0 {
+                        if let unwrappedUsername = coreDataUsername[0].username {
+                            username = unwrappedUsername
+                        }
+                    }
+                }
+            }
+        }
+        
     }
     
     func countClasses() -> Int {
@@ -57,10 +76,21 @@ class ProfileTableViewController: UITableViewController {
         
         if indexPath.row == 0 {
             cell.textLabel!.text = username + "."
+            cell.isUserInteractionEnabled = true
         } else if indexPath.row == 1 {
-            cell.textLabel!.text = String(classCount) + " classes."
+            if classCount == 1 {
+                cell.textLabel!.text = String(classCount) + " class."
+            } else {
+                cell.textLabel!.text = String(classCount) + " classes."
+            }
+            cell.isUserInteractionEnabled = false
         } else {
-            cell.textLabel!.text = String(assignmentsCount) + " assignments left."
+            if assignmentsCount == 1 {
+                cell.textLabel!.text = String(assignmentsCount) + " assignment left."
+            } else {
+                cell.textLabel!.text = String(assignmentsCount) + " assignments left."
+            }
+            cell.isUserInteractionEnabled = false
         }
         
         return cell
@@ -74,6 +104,13 @@ class ProfileTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 3
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            performSegue(withIdentifier: "toEditName", sender: self)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }

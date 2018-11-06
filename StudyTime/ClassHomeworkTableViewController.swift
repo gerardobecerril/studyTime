@@ -9,14 +9,39 @@
 import UIKit
 
 class ClassHomeworkTableViewController: UITableViewController {
-
-    var previousVC = ClassesTableViewController()
-    var currentClass = ClassEntity()
+    
     var myAssignments : [AssignmentEntity] = []
+    var dates : [DayClass] = []
+    var shouldReloadData = false
+    var previousVC = ClassesTableViewController()
+    var currentClass : ClassEntity?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        dates = getDates()
+        sortDates()
         getAssignments()
+    }
+    
+    func sortDates() {
+        
+        var myDates : [Date] = []
+        for date in dates {
+            if let unwrappedDate = date.dueDate {
+                myDates.append(unwrappedDate)
+            }
+        }
+        
+        myDates.sort()
+        if dates.count > 0 {
+            for i in 0...dates.count-1 {
+                dates[i].dueDate = myDates[i]
+            }
+        }
     }
     
     func getAssignments() {
@@ -27,27 +52,37 @@ class ClassHomeworkTableViewController: UITableViewController {
                 
                 if let coreDataAssignments = entityAssignments {
                     
-                    for assignment in coreDataAssignments {
-                        
-                        if assignment.rgbClass == currentClass.name {
-                            
-                            myAssignments.append(assignment)
-                            
-                        }
-                        
-                    }
+                    myAssignments = coreDataAssignments
                     
                     if myAssignments.count > 0 {
                         
                         for i in 0...myAssignments.count-1 {
+                            
+                            myAssignments[i].identifier = Int16(i)
+                            
                             if let myClassName = myAssignments[i].rgbClass {
                                 let classColors = getClassesColors(currentClass: myClassName)
                                 myAssignments[i].red = classColors[0]
                                 myAssignments[i].green = classColors[1]
                                 myAssignments[i].blue = classColors[2]
                             }
+                            
+                            if dates.count > 0 {
+                                
+                                for j in 0...dates.count-1 {
+                                    if dates[j].dueDate == myAssignments[i].dueDate {
+                                        dates[j].assignmentsCounter += 1
+                                        dates[j].dailyAssignments.append(Int(myAssignments[i].identifier))
+                                    }
+                                }
+                            }
                         }
-                        
+                    }
+                    
+                    if shouldReloadData || GlobalData.shouldReloadAssignments {
+                        tableView.reloadData()
+                        shouldReloadData = false
+                        GlobalData.shouldReloadAssignments = false
                     }
                 }
             }
@@ -82,43 +117,107 @@ class ClassHomeworkTableViewController: UITableViewController {
         
         return colorArray
     }
-
+    
+    func getDates() -> [DayClass] {
+        
+        var myDates : [DayClass] = []
+        
+        if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+            
+            if let entityAssignments = try? context.fetch(AssignmentEntity.fetchRequest()) as? [AssignmentEntity] {
+                
+                var myCDAssignments : [AssignmentEntity] = []
+                if let coreDataAssignments = entityAssignments {
+                    
+                    for assignment in coreDataAssignments {
+                        if assignment.rgbClass == currentClass?.name {
+                            myCDAssignments.append(assignment)
+                        }
+                    }
+                    
+                    if myCDAssignments.count > 0 {
+                        
+                        for i in 0...myCDAssignments.count-1 {
+                            
+                            let newDate = DayClass()
+                            if let unwrappedData = myCDAssignments[i].dueDate {
+                                myDates.append(newDate)
+                                myDates[i].dueDate = unwrappedData
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+        
+        return myDates
+        
+    }
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return myAssignments.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = Bundle.main.loadNibNamed("CustomTableViewCell", owner: self, options: nil)?.first as! CustomTableViewCell
-        cell.cellColor.backgroundColor = UIColor(red: CGFloat(myAssignments[indexPath.row].red), green: CGFloat(myAssignments[indexPath.row].green), blue: CGFloat(myAssignments[indexPath.row].blue), alpha: 1.0)
-        cell.cellLabel.text = myAssignments[indexPath.row].name
-
-        return cell
+        return dates.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        if indexPath.row == 0 {
+            return 25
+        } else {
+            return 50
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return dates[section].assignmentsCounter+1
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let myAssignment = myAssignments[indexPath.row]
+        var todaysAssignments : [AssignmentEntity] = []
+        if myAssignments.count > 0 {
+            for i in 0...myAssignments.count-1 {
+                if myAssignments[i].dueDate == dates[indexPath.section].dueDate {
+                    todaysAssignments.append(myAssignments[i])
+                }
+            }
+        }
+        let myAssignment = todaysAssignments[indexPath.row-1]
         performSegue(withIdentifier: "toHWInfo", sender: myAssignment)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    // MARK: - Segues
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.row == 0 {
+            
+            let cell = Bundle.main.loadNibNamed("CustomTableViewCell2", owner: self, options: nil)?.first as! CustomTableViewCell2
+            cell.cellColor.backgroundColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            if let unwrappedDate = dates[indexPath.section].dueDate {
+                cell.cellLabel.text = dateFormatter.string(from: unwrappedDate)
+            }
+            return cell
+            
+        } else {
+            
+            let cell = Bundle.main.loadNibNamed("CustomTableViewCell", owner: self, options: nil)?.first as! CustomTableViewCell
+            cell.cellColor.backgroundColor = UIColor(red: CGFloat(myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].red), green: CGFloat(myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].green), blue: CGFloat(myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].blue), alpha: 1.0)
+            cell.cellLabel.text = myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].name
+            return cell
+            
+        }
+        
+    }
     
     @IBAction func infoTapped(_ sender: Any) {
         performSegue(withIdentifier: "toClassInfo", sender: currentClass)
     }
+    
+    // MARK : - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -126,6 +225,14 @@ class ClassHomeworkTableViewController: UITableViewController {
             infoVC.previousVC = self
             if let selectedClass = sender as? ClassEntity {
                 infoVC.currentClass = selectedClass
+            }
+        }
+        
+        if let assignmentInfoVC = segue.destination as? AssignmentInfoViewController {
+            if let selectedAssignment = sender as? AssignmentEntity {
+                assignmentInfoVC.previousVC2 = self
+                assignmentInfoVC.currentAssignment2 = selectedAssignment
+                assignmentInfoVC.currentSender = 0
             }
         }
         

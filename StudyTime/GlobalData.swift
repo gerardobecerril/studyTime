@@ -10,4 +10,5 @@ import Foundation
 
 class GlobalData {
     static var shouldReloadAssignments = false
+    static var shouldReloadHomework = false
 }

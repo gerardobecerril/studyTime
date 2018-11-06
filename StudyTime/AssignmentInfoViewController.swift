@@ -15,15 +15,31 @@ class AssignmentInfoViewController: UIViewController {
     @IBOutlet weak var descField: UITextView!
     
     var previousVC = AssignmentsTableViewController()
+    var previousVC2 = ClassHomeworkTableViewController()
     var currentAssignment : AssignmentEntity?
-    var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    var currentAssignment2 : AssignmentEntity?
+    var currentSender = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        classField.text = currentAssignment?.rgbClass
-        descField.text = currentAssignment?.desc
-        if let unwrappedDate = currentAssignment?.date {
-            dayField.text = days[Int(unwrappedDate)]
+        if currentSender == 1 {
+            if let unwrappedAssignment = currentAssignment {
+                setUpView(myAssignment: unwrappedAssignment)
+            }
+        } else {
+            if let unwrappedAssignment = currentAssignment2 {
+                setUpView(myAssignment: unwrappedAssignment)
+            }
+        }
+    }
+    
+    func setUpView(myAssignment: AssignmentEntity) {
+        classField.text = myAssignment.rgbClass
+        descField.text = myAssignment.desc
+        if let unwrappedDate = myAssignment.dueDate {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            dayField.text = dateFormatter.string(from: unwrappedDate)
         }
     }
     
@@ -31,9 +47,16 @@ class AssignmentInfoViewController: UIViewController {
         
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
             
-            if let selectedAssignment = currentAssignment {
-                context.delete(selectedAssignment)
-                navigationController?.popViewController(animated: true)
+            if currentSender == 1 {
+                if let selectedAssignment = currentAssignment {
+                    context.delete(selectedAssignment)
+                    navigationController?.popViewController(animated: true)
+                }
+            } else {
+                if let selectedAssignment = currentAssignment2 {
+                    context.delete(selectedAssignment)
+                    navigationController?.popViewController(animated: true)
+                }
             }
             
             try? context.save()
@@ -41,6 +64,7 @@ class AssignmentInfoViewController: UIViewController {
         }
         
         previousVC.shouldReloadData = true
+        previousVC2.shouldReloadData = true
         
     }
 

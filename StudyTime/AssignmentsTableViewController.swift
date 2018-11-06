@@ -11,7 +11,7 @@ import UIKit
 class AssignmentsTableViewController: UITableViewController {
     
     var myAssignments : [AssignmentEntity] = []
-    var days : [DayClass] = []
+    var dates : [DayClass] = []
     var shouldReloadData = false
 
     override func viewDidLoad() {
@@ -20,8 +20,26 @@ class AssignmentsTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        days = addDays()
+        dates = getDates()
+        sortDates()
         getAssignments()
+    }
+    
+    func sortDates() {
+        
+        var myDates : [Date] = []
+        for date in dates {
+            if let unwrappedDate = date.dueDate {
+                myDates.append(unwrappedDate)
+            }
+        }
+        
+        myDates.sort()
+        var i = 0
+        for date in dates {
+            date.dueDate = myDates[i]
+            i += 1
+        }
     }
     
     func getAssignments() {
@@ -37,22 +55,26 @@ class AssignmentsTableViewController: UITableViewController {
                     if myAssignments.count > 0 {
                         
                         for i in 0...myAssignments.count-1 {
+                            
                             myAssignments[i].identifier = Int16(i)
+                            
                             if let myClassName = myAssignments[i].rgbClass {
                                 let classColors = getClassesColors(currentClass: myClassName)
                                 myAssignments[i].red = classColors[0]
                                 myAssignments[i].green = classColors[1]
                                 myAssignments[i].blue = classColors[2]
                             }
-                        }
-                        
-                        for assignment in myAssignments {
-                            if !days[Int(assignment.date)].dailyAssignments.contains(Int(assignment.identifier)) {
-                                days[Int(assignment.date)].assignmentsCounter += 1
-                                days[Int(assignment.date)].dailyAssignments.append(Int(assignment.identifier))
+                            
+                            if dates.count > 0 {
+                                
+                                for j in 0...dates.count-1 {
+                                    if dates[j].dueDate == myAssignments[i].dueDate {
+                                        dates[j].assignmentsCounter += 1
+                                        dates[j].dailyAssignments.append(Int(myAssignments[i].identifier))
+                                    }
+                                }
                             }
                         }
-                        
                     }
                     
                     if shouldReloadData || GlobalData.shouldReloadAssignments {
@@ -94,41 +116,41 @@ class AssignmentsTableViewController: UITableViewController {
         return colorArray
     }
     
-//    func getDates() -> [DayClass] {
-//
-//    }
-    
-    func addDays() -> [DayClass] {
-        let monday = DayClass()
-        monday.assignmentsCounter = 0
-        monday.fakeDay = "Monday"
-        let tuesday = DayClass()
-        tuesday.assignmentsCounter = 0
-        tuesday.fakeDay = "Tuesday"
-        let wednesday = DayClass()
-        wednesday.assignmentsCounter = 0
-        wednesday.fakeDay = "Wednesday"
-        let thursday = DayClass()
-        thursday.assignmentsCounter = 0
-        thursday.fakeDay = "Thursday"
-        let friday = DayClass()
-        friday.assignmentsCounter = 0
-        friday.fakeDay = "Friday"
-        let saturday = DayClass()
-        saturday.assignmentsCounter = 0
-        saturday.fakeDay = "Saturday"
-        let sunday = DayClass()
-        sunday.assignmentsCounter = 0
-        sunday.fakeDay = "Sunday"
+    func getDates() -> [DayClass] {
         
-        return [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+        var myDates : [DayClass] = []
+        
+        if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+            
+            if let entityAssignments = try? context.fetch(AssignmentEntity.fetchRequest()) as? [AssignmentEntity] {
+                
+                if let coreDataAssignments = entityAssignments {
+                    
+                    if coreDataAssignments.count > 0 {
+                        
+                        for i in 0...coreDataAssignments.count-1 {
+                            
+                            let newDate = DayClass()
+                            if let unwrappedData = coreDataAssignments[i].dueDate {
+                                myDates.append(newDate)
+                                myDates[i].dueDate = unwrappedData
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+        
+        return myDates
+        
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return days.count
+        return dates.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -141,20 +163,14 @@ class AssignmentsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if days[section].assignmentsCounter == 0 {
-            return 0
-        } else {
-            return days[section].assignmentsCounter+1
-        }
+        return dates[section].assignmentsCounter+1
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var todaysAssignments : [AssignmentEntity] = []
-        if myAssignments.count > 0 {
-            for assignment in 0...myAssignments.count-1 {
-                if Int(myAssignments[assignment].date) == indexPath.section {
-                    todaysAssignments.append(myAssignments[assignment])
-                }
+        for i in 0...myAssignments.count-1 {
+            if myAssignments[i].dueDate == dates[indexPath.section].dueDate {
+                todaysAssignments.append(myAssignments[i])
             }
         }
         let myAssignment = todaysAssignments[indexPath.row-1]
@@ -168,14 +184,20 @@ class AssignmentsTableViewController: UITableViewController {
             
             let cell = Bundle.main.loadNibNamed("CustomTableViewCell2", owner: self, options: nil)?.first as! CustomTableViewCell2
             cell.cellColor.backgroundColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)
-            cell.cellLabel.text = days[indexPath.section].fakeDay
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            if let unwrappedDate = dates[indexPath.section].dueDate {
+                cell.cellLabel.text = dateFormatter.string(from: unwrappedDate)
+            }
+            cell.isUserInteractionEnabled = false
             return cell
             
         } else {
             
             let cell = Bundle.main.loadNibNamed("CustomTableViewCell", owner: self, options: nil)?.first as! CustomTableViewCell
-            cell.cellColor.backgroundColor = UIColor(red: CGFloat(myAssignments[days[indexPath.section].dailyAssignments[indexPath.row-1]].red), green: CGFloat(myAssignments[days[indexPath.section].dailyAssignments[indexPath.row-1]].green), blue: CGFloat(myAssignments[days[indexPath.section].dailyAssignments[indexPath.row-1]].blue), alpha: 1.0)
-            cell.cellLabel.text = myAssignments[days[indexPath.section].dailyAssignments[indexPath.row-1]].name
+            cell.cellColor.backgroundColor = UIColor(red: CGFloat(myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].red), green: CGFloat(myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].green), blue: CGFloat(myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].blue), alpha: 1.0)
+            cell.cellLabel.text = myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].name
+            cell.isUserInteractionEnabled = true
             return cell
             
         }
@@ -194,6 +216,7 @@ class AssignmentsTableViewController: UITableViewController {
             if let selectedAssignment = sender as? AssignmentEntity {
                 assignmentInfoVC.previousVC = self
                 assignmentInfoVC.currentAssignment = selectedAssignment
+                assignmentInfoVC.currentSender = 1
             }
         }
         

@@ -24,12 +24,48 @@ class ClassInfoViewController: UIViewController {
         if let unwrappedName = currentClass?.name {
             if let unwrappedTeacher = currentClass?.teacher {
                 if let unwrappedNotes = currentClass?.notes {
-                    nameField.text = unwrappedName
-                    teacherField.text = unwrappedTeacher
-                    notesView.text = unwrappedNotes
+                    if let unwrappedRed = currentClass?.red {
+                        if let unwrappedGreen = currentClass?.green {
+                            if let unwrappedBlue = currentClass?.blue {
+                                colorField.text = getColorFromRGB(red: unwrappedRed, green: unwrappedGreen, blue: unwrappedBlue)
+                                nameField.text = unwrappedName
+                                teacherField.text = unwrappedTeacher
+                                notesView.text = unwrappedNotes
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+    
+    func getColorFromRGB(red: Double, green: Double, blue: Double) -> String {
+        var colorName = ""
+        switch(red, green, blue) {
+        case(1.0, 0.0, 0.0):
+            colorName = "Red"
+        case(Double(128/255), 1.0, 0.0):
+            colorName = "Light green"
+        case(Double(76/255), 0.6, 0.0):
+            colorName = "Dark green"
+        case(0, 1.0, 1.0):
+            colorName = "Light blue"
+        case(0.2, 0.2, 1.0):
+            colorName = "Dark blue"
+        case(0.4, 0.0, 0.8):
+            colorName = "Purple"
+        case(1.0, 1.0, 0.0):
+            colorName = "Yellow"
+        case(Double(160.0/255.0), Double(160.0/255.0), Double(160.0/255.0)):
+            colorName = "Grey"
+        case(0.4, 0.2, 0.0):
+            colorName = "Brown"
+        case(1.0, Double(128.0/255.0), 0.0):
+            colorName = "Orange"
+        default:
+            colorName = "White"
+        }
+        return colorName
     }
     
     @IBAction func doneTapped(_ sender: Any) {

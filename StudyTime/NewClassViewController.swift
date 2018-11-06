@@ -138,6 +138,10 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return true
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return false
+    }
+    
     // MARK: - Textview Placeholder
     
     func textViewDidBeginEditing(_ textView: UITextView) {
