@@ -14,12 +14,13 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
     @IBOutlet weak var teacher: UITextField!
     @IBOutlet weak var notes: UITextView!
     @IBOutlet weak var color: UITextField!
-    let pickerView = UIPickerView()
     
+    let pickerView = UIPickerView()
     var fieldWasSelected = false
     var fieldDidBeginEditing = false
     var previousVC = ClassesTableViewController() 
     var selectedColor : String?
+    var nameIsAvailable = true
     let colors = ["Red",
                   "Light green",
                   "Dark green",
@@ -33,24 +34,50 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.hideKeyboardWhenTappedAround()
+        self.hideKeyboardWhenScreenIsTapped()
+        setUpFields()
+        pickerView.delegate = self
+        color.delegate = self
+        notes.delegate = self
+        color.inputView = pickerView
+        createToolBar()
+    }
+    
+    // MARK: - Buttons
+    
+    @IBAction func doneTapped(_ sender: Any) {
+        if notes.textColor == UIColor.lightGray {
+            notes.text = ""
+        }
+        if name.text != "" && teacher.text != "" && color.text != "Pick a color" {
+            addClass()
+        } else {
+            displayAlert(alertTitle: "Fields missing", alertMessage: "You haven't filled all the fields required.", actionTitle: "OK")
+        }
+    }
+    
+    // MARK: - Setup functions
+    
+    func setUpFields() {
         name.text = ""
         teacher.text = ""
         textViewPlaceholder()
         color.text = "Pick a color"
-        pickerView.delegate = self
-        color.inputView = pickerView
-        color.delegate = self
-        notes.delegate = self
-        createToolBar()
     }
     
-    @IBAction func doneTapped(_ sender: Any) {
-        
-        if name.text != "" && teacher.text != "" && color.text != "Pick a color" {
-            
-            if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
-                
+    func addClass() {
+        if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+            if let entityClasses = try? context.fetch(ClassEntity.fetchRequest()) as? [ClassEntity] {
+                if let coreDataClasses = entityClasses {
+                    nameIsAvailable = true
+                    for aClass in coreDataClasses {
+                        if aClass.name == name.text {
+                            nameIsAvailable = false
+                        }
+                    }
+                }
+            }
+            if nameIsAvailable {
                 let newClass = ClassEntity(context: context)
                 if let unwrappedName = name.text {
                     if let unwrappedNotes = notes.text {
@@ -67,23 +94,17 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
                         }
                     }
                 }
-                
                 try? context.save()
-                previousVC.shouldReloadData = true
                 navigationController?.popViewController(animated: true)
-                
+            } else {
+                displayAlert(alertTitle: "Name is not available", alertMessage: "You've already assigned that name to another class. Change it.", actionTitle: "OK")
             }
-            
-        } else {
-            
-            displayAlert(alertTitle: "Fields missing", alertMessage: "You haven't filled all the fields required.", actionTitle: "OK")
-            
         }
-        
     }
     
     func chooseColor(color: String) -> [Double] {
         var colorArray = [1.0, 1.0, 1.0]
+        
         switch(color) {
         case "Red":
             colorArray = [1, 0, 0]
@@ -111,7 +132,7 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return colorArray
     }
     
-    // MARK: - PickerView
+    // MARK: - Picker view
     
     @objc func dismissKeyboardForPickerView() {
         view.endEditing(true)
@@ -134,6 +155,7 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        textField.autocapitalizationType = .sentences
         fieldDidBeginEditing = true
         return true
     }
@@ -142,7 +164,7 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
         return false
     }
     
-    // MARK: - Textview Placeholder
+    // MARK: - Text view Placeholder
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if notes.textColor == UIColor.lightGray {
@@ -163,6 +185,8 @@ class NewClassViewController: UIViewController, UITextFieldDelegate, UITextViewD
     }
 
 }
+
+// MARK: - PickerView Extension
 
 extension NewClassViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     

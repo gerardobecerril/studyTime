@@ -1,86 +1,80 @@
 //
-//  AssignmentsTableViewController.swift
+//  ClassHomeworkTableViewController.swift
 //  StudyTime
 //
-//  Created by Gerardo Becerril on 10/31/18.
+//  Created by Gerardo Becerril on 10/28/18.
 //  Copyright © 2018 Gerardo Glz. All rights reserved.
 //
 
 import UIKit
 
-class AssignmentsTableViewController: UITableViewController {
+class ClassHomeworkTableViewController: UITableViewController {
     
     var myAssignments : [AssignmentEntity] = []
     var dates : [DayClass] = []
-    var shouldReloadData = false
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
+    var previousVC = ClassesTableViewController()
+    var currentClass : ClassEntity?
     
     override func viewWillAppear(_ animated: Bool) {
         dates = getDates()
         sortDates()
         getAssignments()
+        tableView.reloadData()
     }
     
+    // MARK: - Buttons
+    
+    @IBAction func infoTapped(_ sender: Any) {
+        performSegue(withIdentifier: "toClassInfo", sender: currentClass)
+    }
+    
+    // MARK: - Setup functions
+    
     func sortDates() {
-        
         var myDates : [Date] = []
+        
         for date in dates {
             if let unwrappedDate = date.dueDate {
                 myDates.append(unwrappedDate)
             }
         }
-        
         myDates.sort()
-        var i = 0
-        for date in dates {
-            date.dueDate = myDates[i]
-            i += 1
+        if dates.count > 0 {
+            for i in 0...dates.count-1 {
+                dates[i].dueDate = myDates[i]
+            }
         }
     }
     
     func getAssignments() {
-        
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
-            
             if let entityAssignments = try? context.fetch(AssignmentEntity.fetchRequest()) as? [AssignmentEntity] {
-                
                 if let coreDataAssignments = entityAssignments {
-                    
-                    myAssignments = coreDataAssignments
-                    
+                    myAssignments = []
+                    for assignment in coreDataAssignments {
+                        if assignment.rgbClass == currentClass?.name {
+                            myAssignments.append(assignment)
+                        }
+                    }
                     if myAssignments.count > 0 {
-                        
                         for i in 0...myAssignments.count-1 {
-                            
                             myAssignments[i].identifier = Int16(i)
-                            
                             if let myClassName = myAssignments[i].rgbClass {
                                 let classColors = getClassesColors(currentClass: myClassName)
                                 myAssignments[i].red = classColors[0]
                                 myAssignments[i].green = classColors[1]
                                 myAssignments[i].blue = classColors[2]
                             }
-                            
                             if dates.count > 0 {
-                                
                                 for j in 0...dates.count-1 {
                                     if dates[j].dueDate == myAssignments[i].dueDate {
                                         dates[j].assignmentsCounter += 1
-                                        dates[j].dailyAssignments.append(Int(myAssignments[i].identifier))
+                                        let myIdentifier = Int(myAssignments[i].identifier)
+                                        dates[j].dailyAssignments.append(myIdentifier)
                                     }
                                 }
                             }
                         }
-                    }
-                    
-                    if shouldReloadData || GlobalData.shouldReloadAssignments {
-                        tableView.reloadData()
-                        shouldReloadData = false
-                        GlobalData.shouldReloadAssignments = false
                     }
                 }
             }
@@ -88,7 +82,6 @@ class AssignmentsTableViewController: UITableViewController {
     }
     
     func getClassesColors(currentClass: String) -> [Double] {
-        
         var colorArray : [Double] = []
         
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
@@ -121,33 +114,39 @@ class AssignmentsTableViewController: UITableViewController {
         var myDates : [DayClass] = []
         
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
-            
             if let entityAssignments = try? context.fetch(AssignmentEntity.fetchRequest()) as? [AssignmentEntity] {
-                
+                var myCDAssignments : [AssignmentEntity] = []
                 if let coreDataAssignments = entityAssignments {
-                    
-                    if coreDataAssignments.count > 0 {
-                        
-                        for i in 0...coreDataAssignments.count-1 {
-                            
+                    for assignment in coreDataAssignments {
+                        if assignment.rgbClass == currentClass?.name {
+                            myCDAssignments.append(assignment)
+                        }
+                    }
+                    if myCDAssignments.count > 0 {
+                        for i in 0...myCDAssignments.count-1 {
                             let newDate = DayClass()
-                            if let unwrappedData = coreDataAssignments[i].dueDate {
-                                myDates.append(newDate)
-                                myDates[i].dueDate = unwrappedData
+                            if let unwrappedDate = myCDAssignments[i].dueDate {
+                                var dateIsNew = true
+                                for date in myDates {
+                                    if date.dueDate == unwrappedDate {
+                                        dateIsNew = false
+                                    }
+                                }
+                                if dateIsNew {
+                                    myDates.append(newDate)
+                                    myDates[i].dueDate = unwrappedDate
+                                }
                             }
-                            
                         }
                     }
                 }
             }
         }
-        
         return myDates
-        
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return dates.count
@@ -164,18 +163,6 @@ class AssignmentsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return dates[section].assignmentsCounter+1
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var todaysAssignments : [AssignmentEntity] = []
-        for i in 0...myAssignments.count-1 {
-            if myAssignments[i].dueDate == dates[indexPath.section].dueDate {
-                todaysAssignments.append(myAssignments[i])
-            }
-        }
-        let myAssignment = todaysAssignments[indexPath.row-1]
-        performSegue(withIdentifier: "toAssignmentInfo", sender: myAssignment)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -199,27 +186,39 @@ class AssignmentsTableViewController: UITableViewController {
             cell.cellLabel.text = myAssignments[dates[indexPath.section].dailyAssignments[indexPath.row-1]].name
             cell.isUserInteractionEnabled = true
             return cell
-            
         }
         
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var todaysAssignments : [AssignmentEntity] = []
+        if myAssignments.count > 0 {
+            for i in 0...myAssignments.count-1 {
+                if myAssignments[i].dueDate == dates[indexPath.section].dueDate {
+                    todaysAssignments.append(myAssignments[i])
+                }
+            }
+        }
+        let myAssignment = todaysAssignments[indexPath.row-1]
+        performSegue(withIdentifier: "toHWInfo", sender: myAssignment)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     // MARK : - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if let newAssignmentVC = segue.destination as? NewAssignmentViewController {
-            newAssignmentVC.previousVC = self
-        }
-        
-        if let assignmentInfoVC = segue.destination as? AssignmentInfoViewController {
-            if let selectedAssignment = sender as? AssignmentEntity {
-                assignmentInfoVC.previousVC = self
-                assignmentInfoVC.currentAssignment = selectedAssignment
-                assignmentInfoVC.currentSender = 1
+        if let infoVC = segue.destination as? ClassInfoViewController {
+            infoVC.previousVC = self
+            if let selectedClass = sender as? ClassEntity {
+                infoVC.currentClass = selectedClass
             }
         }
         
+        if let assignmentInfoVC = segue.destination as? HomeworkInfoViewController {
+            if let selectedAssignment = sender as? AssignmentEntity {
+                assignmentInfoVC.currentAssignment = selectedAssignment
+            }
+        }
     }
-
 }

@@ -14,11 +14,9 @@ class NewAssignmentViewController: UIViewController, UITextFieldDelegate, UIText
     @IBOutlet weak var classField: UITextField!
     @IBOutlet weak var dateField: UITextField!
     @IBOutlet weak var descField: UITextView!
+    
     let pickerView = UIPickerView()
     private var datePicker : UIDatePicker?
-    
-    var previousVC = AssignmentsTableViewController()
-    var selectedClass : String?
     var lastRowForClass = 0
     var classWasSelected = false
     var classDidBeginEditing = false
@@ -26,10 +24,11 @@ class NewAssignmentViewController: UIViewController, UITextFieldDelegate, UIText
     var dateDidBeginEditing = false
     var lastDate : Date?
     var myClasses : [String] = []
+    var nameIsAvailable = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.hideKeyboardWhenTappedAround()
+        self.hideKeyboardWhenScreenIsTapped()
         createDatePicker()
         getMyClasses()
         textViewPlaceholder()
@@ -44,6 +43,53 @@ class NewAssignmentViewController: UIViewController, UITextFieldDelegate, UIText
         createToolBars()
     }
     
+    // MARK: - Buttons
+    
+    @IBAction func doneTapped(_ sender: Any) {
+        if descField.textColor == UIColor.lightGray {
+            descField.text = ""
+        }
+        if titleField.text != "" && dateField.text != "Due date" && classField.text != "Class" {
+            if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
+                if let entityAssignments = try? context.fetch(AssignmentEntity.fetchRequest()) as? [AssignmentEntity] {
+                    if let coreDataAssignments = entityAssignments {
+                        nameIsAvailable = true
+                        for assignment in coreDataAssignments {
+                            if assignment.name == titleField.text {
+                                nameIsAvailable = false
+                            }
+                        }
+                    }
+                }
+                if nameIsAvailable {
+                    let newAssignment = AssignmentEntity(context: context)
+                    if let unwrappedTitleField = titleField.text {
+                        if let unwrappedDescField = descField.text {
+                            if let unwrappedSelectedDate = dateField.text {
+                                if let unwrappedClassName = classField.text {
+                                    newAssignment.name = unwrappedTitleField
+                                    newAssignment.desc = unwrappedDescField
+                                    newAssignment.rgbClass = unwrappedClassName
+                                    let dateFormatter = DateFormatter()
+                                    dateFormatter.dateFormat = "MM/dd/yyyy"
+                                    newAssignment.dueDate = dateFormatter.date(from: unwrappedSelectedDate)
+                                }
+                            }
+                        }
+                    }
+                    try? context.save()
+                    navigationController?.popViewController(animated: true)
+                } else {
+                    displayAlert(alertTitle: "Name is not available", alertMessage: "You've already assigned that name to another assignment. Change it.", actionTitle: "OK")
+                }
+            }
+        } else {
+            displayAlert(alertTitle: "Fields missing", alertMessage: "You haven't filled all the fields required.", actionTitle: "OK")
+        }
+    }
+    
+    // MARK: - Setup functions
+    
     func createDatePicker() {
         datePicker = UIDatePicker()
         datePicker?.datePickerMode = .date
@@ -56,53 +102,13 @@ class NewAssignmentViewController: UIViewController, UITextFieldDelegate, UIText
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
         dateField.text = dateFormatter.string(from: datePicker.date)
-        view.endEditing(true)
-    }
-    
-    @IBAction func doneTapped(_ sender: Any) {
-        
-        if titleField.text != "" && dateField.text != "Due date" && classField.text != "Class" {
-            
-            if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
-                
-                let newAssignment = AssignmentEntity(context: context)
-                if let unwrappedTitleField = titleField.text {
-                    if let unwrappedDescField = descField.text {
-                        if let unwrappedSelectedDate = dateField.text {
-                            if let unwrappedClassName = classField.text {
-                                newAssignment.name = unwrappedTitleField
-                                newAssignment.desc = unwrappedDescField
-                                newAssignment.rgbClass = unwrappedClassName
-                                let dateFormatter = DateFormatter()
-                                dateFormatter.dateFormat = "MM/dd/yyyy"
-                                newAssignment.dueDate = dateFormatter.date(from: unwrappedSelectedDate)
-                            }
-                        }
-                    }
-                }
-                
-                try? context.save()
-                previousVC.shouldReloadData = true
-                navigationController?.popViewController(animated: true)
-                
-            }
-            
-        } else {
-            
-            displayAlert(alertTitle: "Fields missing", alertMessage: "You haven't filled all the fields required.", actionTitle: "OK")
-            
-        }
-        
     }
     
     func getMyClasses() {
-        
+        myClasses = []
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
-            
             if let entityClasses = try? context.fetch(ClassEntity.fetchRequest()) as? [ClassEntity] {
-                
                 if let coreDataClasses = entityClasses {
-                    
                     if coreDataClasses.count > 0 {
                         for i in 0...coreDataClasses.count-1 {
                             if let myClassName = coreDataClasses[i].name {
@@ -113,14 +119,12 @@ class NewAssignmentViewController: UIViewController, UITextFieldDelegate, UIText
                 }
             }
         }
-        
     }
     
     // MARK: - PickerViews
     
     @objc func dismissKeyboardForPickerView() {
         view.endEditing(true)
-        
         if !classWasSelected && classDidBeginEditing {
             if myClasses.count > 0 {
                 classField.text = myClasses[0]
@@ -129,20 +133,19 @@ class NewAssignmentViewController: UIViewController, UITextFieldDelegate, UIText
     }
     
     @objc func dismissKeyboardForDatePicker() {
-        view.endEditing(true)
-        
-        print(dateWasSelected)
-        print(dateDidBeginEditing)
         if !dateWasSelected && dateDidBeginEditing {
-            if let unwrappedDate = lastDate {
-                datePicker?.setDate(unwrappedDate, animated: true)
+            if let unwrappedDatePicker = datePicker {
+                dateChanged(datePicker: unwrappedDatePicker)
             }
         }
+        view.endEditing(true)
     }
     
     func createToolBars() {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
+        let toolBar2 = UIToolbar()
+        toolBar2.sizeToFit()
         
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboardForPickerView))
         let doneButton2 = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboardForDatePicker))
@@ -151,25 +154,19 @@ class NewAssignmentViewController: UIViewController, UITextFieldDelegate, UIText
         toolBar.isUserInteractionEnabled = true
         classField.inputAccessoryView = toolBar
         
-        toolBar.setItems([doneButton2], animated: true)
-        toolBar.isUserInteractionEnabled = true
-        dateField.inputAccessoryView = toolBar
+        toolBar2.setItems([doneButton2], animated: true)
+        toolBar2.isUserInteractionEnabled = true
+        dateField.inputAccessoryView = toolBar2
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        print("mm")
+        textField.autocapitalizationType = .sentences
         if textField == classField {
-            pickerView.selectRow(lastRowForClass, inComponent: 0, animated: true)
             classDidBeginEditing = true
             pickerView.reloadAllComponents()
-        } else if textField == dateField {
-            if let unwrappedDate = lastDate {
-                datePicker?.setDate(unwrappedDate, animated: true)
-            }
+        } else {
             dateDidBeginEditing = true
             datePicker?.reloadInputViews()
-        } else {
-            
         }
         return true
     }
@@ -200,7 +197,7 @@ class NewAssignmentViewController: UIViewController, UITextFieldDelegate, UIText
     
 }
 
-// MARK: - PickerView Extension
+// MARK: - Picker view Extension
 
 extension NewAssignmentViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -229,9 +226,11 @@ extension NewAssignmentViewController: UIPickerViewDelegate, UIPickerViewDataSou
     
 }
 
+// MARK: - Other functions
+
 extension UIViewController {
     
-    func hideKeyboardWhenTappedAround() {
+    func hideKeyboardWhenScreenIsTapped() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)

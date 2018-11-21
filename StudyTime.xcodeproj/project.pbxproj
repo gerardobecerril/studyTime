@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		410787272194D0BB00B4DEAE /* MyAssigmentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410787262194D0BB00B4DEAE /* MyAssigmentsTableViewController.swift */; };
 		4113D6F82190C6AC005D7EF9 /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4113D6F72190C6AC005D7EF9 /* ProfileTableViewController.swift */; };
 		41341935218372670080A87A /* NewClassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41341934218372670080A87A /* NewClassViewController.swift */; };
-		4134AE572190BF8E00B87C7E /* GlobalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4134AE562190BF8E00B87C7E /* GlobalData.swift */; };
 		414B90FC2183499000B4EBE3 /* ClassesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414B90FB2183499000B4EBE3 /* ClassesTableViewController.swift */; };
 		415D010D218F988A00AD976E /* AssignmentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415D010C218F988A00AD976E /* AssignmentInfoViewController.swift */; };
+		41732F7D2193F23D00C86C45 /* HomeworkInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41732F7C2193F23D00C86C45 /* HomeworkInfoViewController.swift */; };
 		4177A3C92167CC9F00D3935A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4177A3C82167CC9F00D3935A /* AppDelegate.swift */; };
 		4177A3CE2167CC9F00D3935A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4177A3CC2167CC9F00D3935A /* Main.storyboard */; };
 		4177A3D12167CC9F00D3935A /* StudyTime.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4177A3CF2167CC9F00D3935A /* StudyTime.xcdatamodeld */; };
@@ -30,11 +31,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		410787262194D0BB00B4DEAE /* MyAssigmentsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAssigmentsTableViewController.swift; sourceTree = "<group>"; };
 		4113D6F72190C6AC005D7EF9 /* ProfileTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
 		41341934218372670080A87A /* NewClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewClassViewController.swift; sourceTree = "<group>"; };
-		4134AE562190BF8E00B87C7E /* GlobalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalData.swift; sourceTree = "<group>"; };
 		414B90FB2183499000B4EBE3 /* ClassesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassesTableViewController.swift; sourceTree = "<group>"; };
 		415D010C218F988A00AD976E /* AssignmentInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentInfoViewController.swift; sourceTree = "<group>"; };
+		41732F7C2193F23D00C86C45 /* HomeworkInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkInfoViewController.swift; sourceTree = "<group>"; };
 		4177A3C52167CC9F00D3935A /* StudyTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudyTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4177A3C82167CC9F00D3935A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4177A3CD2167CC9F00D3935A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -65,6 +67,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4103A557219623A4001B58EC /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				4177A3CC2167CC9F00D3935A /* Main.storyboard */,
+				4177A3D42167CCA000D3935A /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
 		4177A3BC2167CC9F00D3935A = {
 			isa = PBXGroup;
 			children = (
@@ -85,28 +96,60 @@
 			isa = PBXGroup;
 			children = (
 				4177A3C82167CC9F00D3935A /* AppDelegate.swift */,
-				4177A3CC2167CC9F00D3935A /* Main.storyboard */,
-				41FA2E792192135E00898233 /* EditNameViewController.swift */,
-				4113D6F72190C6AC005D7EF9 /* ProfileTableViewController.swift */,
-				415D010C218F988A00AD976E /* AssignmentInfoViewController.swift */,
-				41DC2532218A8F9F0052579E /* NewAssignmentViewController.swift */,
-				41DC2528218A2EE30052579E /* AssignmentsTableViewController.swift */,
-				417A2ED52186B50900A09DAC /* ClassHomeworkTableViewController.swift */,
-				417A2ED72186B51600A09DAC /* ClassInfoViewController.swift */,
-				414B90FB2183499000B4EBE3 /* ClassesTableViewController.swift */,
-				41341934218372670080A87A /* NewClassViewController.swift */,
-				41DC2530218A4E470052579E /* DayClass.swift */,
-				4134AE562190BF8E00B87C7E /* GlobalData.swift */,
-				41DC252C218A3FC10052579E /* CustomTableViewCell2.swift */,
-				41DC252D218A3FC10052579E /* CustomTableViewCell2.xib */,
-				417F06FD217113CF0095A705 /* CustomTableViewCell.swift */,
-				417F06FE217113CF0095A705 /* CustomTableViewCell.xib */,
+				4103A557219623A4001B58EC /* Storyboards */,
+				41FA2E7B21928B1500898233 /* Classes */,
+				41FA2E7C21928B3100898233 /* Assignments */,
+				41FA2E7D21928BA800898233 /* Profile */,
+				41FA2E7E21928BB900898233 /* Classes & CustomCells */,
 				4177A3D22167CCA000D3935A /* Assets.xcassets */,
-				4177A3D42167CCA000D3935A /* LaunchScreen.storyboard */,
 				4177A3D72167CCA000D3935A /* Info.plist */,
 				4177A3CF2167CC9F00D3935A /* StudyTime.xcdatamodeld */,
 			);
 			path = StudyTime;
+			sourceTree = "<group>";
+		};
+		41FA2E7B21928B1500898233 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				414B90FB2183499000B4EBE3 /* ClassesTableViewController.swift */,
+				41341934218372670080A87A /* NewClassViewController.swift */,
+				417A2ED52186B50900A09DAC /* ClassHomeworkTableViewController.swift */,
+				417A2ED72186B51600A09DAC /* ClassInfoViewController.swift */,
+				41732F7C2193F23D00C86C45 /* HomeworkInfoViewController.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		41FA2E7C21928B3100898233 /* Assignments */ = {
+			isa = PBXGroup;
+			children = (
+				41DC2528218A2EE30052579E /* AssignmentsTableViewController.swift */,
+				410787262194D0BB00B4DEAE /* MyAssigmentsTableViewController.swift */,
+				41DC2532218A8F9F0052579E /* NewAssignmentViewController.swift */,
+				415D010C218F988A00AD976E /* AssignmentInfoViewController.swift */,
+			);
+			path = Assignments;
+			sourceTree = "<group>";
+		};
+		41FA2E7D21928BA800898233 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				4113D6F72190C6AC005D7EF9 /* ProfileTableViewController.swift */,
+				41FA2E792192135E00898233 /* EditNameViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		41FA2E7E21928BB900898233 /* Classes & CustomCells */ = {
+			isa = PBXGroup;
+			children = (
+				41DC2530218A4E470052579E /* DayClass.swift */,
+				417F06FD217113CF0095A705 /* CustomTableViewCell.swift */,
+				417F06FE217113CF0095A705 /* CustomTableViewCell.xib */,
+				41DC252C218A3FC10052579E /* CustomTableViewCell2.swift */,
+				41DC252D218A3FC10052579E /* CustomTableViewCell2.xib */,
+			);
+			path = "Classes & CustomCells";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,7 +229,7 @@
 				41DC2529218A2EE30052579E /* AssignmentsTableViewController.swift in Sources */,
 				41341935218372670080A87A /* NewClassViewController.swift in Sources */,
 				4177A3D12167CC9F00D3935A /* StudyTime.xcdatamodeld in Sources */,
-				4134AE572190BF8E00B87C7E /* GlobalData.swift in Sources */,
+				41732F7D2193F23D00C86C45 /* HomeworkInfoViewController.swift in Sources */,
 				41DC2533218A8F9F0052579E /* NewAssignmentViewController.swift in Sources */,
 				4113D6F82190C6AC005D7EF9 /* ProfileTableViewController.swift in Sources */,
 				417F06FF217113CF0095A705 /* CustomTableViewCell.swift in Sources */,
@@ -194,6 +237,7 @@
 				417A2ED62186B50900A09DAC /* ClassHomeworkTableViewController.swift in Sources */,
 				41FA2E7A2192135E00898233 /* EditNameViewController.swift in Sources */,
 				41DC252E218A3FC10052579E /* CustomTableViewCell2.swift in Sources */,
+				410787272194D0BB00B4DEAE /* MyAssigmentsTableViewController.swift in Sources */,
 				417A2ED82186B51600A09DAC /* ClassInfoViewController.swift in Sources */,
 				4177A3C92167CC9F00D3935A /* AppDelegate.swift in Sources */,
 				415D010D218F988A00AD976E /* AssignmentInfoViewController.swift in Sources */,
